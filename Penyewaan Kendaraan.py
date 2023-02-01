@@ -1,278 +1,22 @@
 from tkinter import *
 from tkinter import ttk
-from datetime import date
-
+import datetime
+from tkcalendar import DateEntry
 
 jenis = ["Motor", "Mobil"]
-kendaraan = ["Matic", "Manual", "Sport", "LCGC", "SUV", "Sedan", "Minivan", "Elf", "Minibus", "Bus"]
+kendaraan = [ "LCGC", "SUV", "Sedan", "Minivan", "Elf", "Minibus", "Bus"]
+kendaraan1 = ["Matic", "Manual", "Sport"]
+fullkendaraan = ["Matic", "Manual", "Sport", "LCGC", "SUV", "Sedan", "Minivan", "Elf", "Minibus", "Bus"]
+stok = [15, 10, 5, 3, 2, 2, 1, 1, 1, 1]
 harga = [150000, 100000, 200000, 300000, 450000, 500000, 650000, 800000, 950000, 1300000]
 jenisdatadiri = ["KTP", "SIM", "PASSPORT", "KARTU PELAJAR"]
  
 userpass = {'admin' : '123'}
+jenischoosen = []
 idpelanggan = []
 kendaraanchoosen = []
-hargapelanggan = []
-tenggatpelanggan = []
-# NANTI ISINYA LIST DALAM LIST BUAT TAMPIL DI GUI
-tampilsewa = []
-rincian = []
-def login1():
-    username = inputusername.get()
-    password = inputpassword.get()
-
-    if username in userpass and password == userpass[username]:
-        login_frame.destroy()
-        window.destroy()
-        
-        main_window = Tk()
-        main_window.title('Penyewaan Kendaraan')
-        frame = Frame(main_window)
-        frame.pack()
-
-        framesewa = LabelFrame(frame, padx=25, pady=25)
-        framesewa.grid(row=0, column=0, padx=20, pady=5)
-
-        framerincian = LabelFrame(frame, padx=25, pady=25)
-        framerincian.grid(row=1, column=0, padx=20, pady=5)
-
-        today = date.today()
-        d1 = today.strftime("%d")
-        d2 = today.strftime("%m")
-        d3 = today.strftime("%Y")
-        d4 = today.strftime("%B %d, %Y")
-
-
-        #LABEL
-        lblinfo = Label(framesewa, font=( 'aria' ,30, 'bold' ),text="Sistem Penyewaan",bd=10,anchor=N)
-        lblinfo.grid(row=0,column=0)
-        lblinfo = Label(framesewa, font=( 'aria' ,12, ),text=d4,anchor=N)
-        lblinfo.grid(row=1,column=0)
-
-        labeljenis= Label(framesewa, text="Jenis Kendaraan :")
-        labeljenis.grid(row=2, column=0)
-        entryjenis = ttk.Combobox(framesewa, values= jenis)
-        entryjenis.grid(row=2, column =1)
-
-        labelkendaraan = Label(framesewa, text="Tipe Kendaraan :", anchor=W)
-        labelkendaraan.grid(row=3, column=0)
-        tipekendaraan = ttk.Combobox(framesewa, values= kendaraan, text="Jenis Ruangan :")
-        tipekendaraan.grid(row=3, column =1)
-
-        labeltanggal = Label(framesewa, text="Tanggal Sewa")
-        labeltanggal.grid(row=4,column=0)
-
-        harisewa = ttk.Combobox(framesewa, width=3)
-        bulansewa = ttk.Combobox(framesewa, width=3)
-        tahunsewa = ttk.Combobox(framesewa, width=4)
-
-
-
-        dayl = [str(i) for i in range(32)]
-        dayl[0]=d1
-        harisewa['values'] = dayl
-
-
-        bulansewa['values'] = (d2,
-                                ' January',  
-                                ' February', 
-                                ' March', 
-                                ' April', 
-                                ' May', 
-                                ' June', 
-                                ' July', 
-                                ' August', 
-                                ' September', 
-                                ' October', 
-                                ' November', 
-                                ' December') 
-
-        yearl = [str(i) for i in range(2022 ,2222)]
-        yearl[0]=d3
-        tahunsewa['values'] = yearl
-
-        harisewa.current(0)
-        harisewa.place(x=378, y=138)
-        bulansewa.current(0)
-        bulansewa.place(x=425, y=138)
-        tahunsewa.current(0)
-        tahunsewa.place(x=474, y=138)
-
-
-
-        labellama = Label(framesewa, text="Lama Sewa")
-        labellama.grid(row=5, column=0)
-        lamasewa = Spinbox(framesewa, from_=1, to=100)
-        lamasewa.grid(row=5, column=1, pady=10)
-
-        labeljenisdata = ttk.Label(framesewa, text="Jenis Data Diri")
-        labeljenisdata.grid(row=6, column=0)
-        entryjenisdatadiri = ttk.Combobox(framesewa, values=jenisdatadiri)
-        entryjenisdatadiri.grid(row=6, column=1)
-
-        labeliddata = Label(framesewa, text="Nomor Identitas")
-        labeliddata.grid(row=7, column=0)
-        iddatadiri = Entry(framesewa)
-        iddatadiri.grid(row=7, column=1, pady=10)
-
-        def hitung():
-            global rincian, idpelanggan
-            entryjenisdatadiri.config(state='disabled')
-            iddatadiri.config(state="disabled") #PROHIBIT ENTRY DIGANTI
-
-
-            label = Label(framerincian, text="List Sewa Kendaraan")
-            label.grid(row=0, column=2)
-
-            no = Label(framerincian, text='No')
-            no.grid(row=1, column=0, )
-
-            id = Label(framerincian, text='ID Pelanggan')
-            id.grid(row=1, column = 1)
-
-            barang = Label(framerincian, text='Tipe Kendaraan')
-            barang.grid(row=1, column=2, )
-
-            quantity = Label(framerincian, text='Lama Sewa')
-            quantity.grid(row=1, column=3, )
-
-            hargas = Label(framerincian, text='Harga')
-            hargas.grid(row=1, column=4, )
-
-            Total = Label(framerincian, text='Total')
-            Total.grid(row=1, column=5, )
-
-            for i in framerincian.winfo_children():
-                i.grid_configure(padx= 15, pady=2)
-
-            # p = entryjenisdatadiri.get() + " " + iddatadiri.get()
-        
-            kendaraanchoosen.append(tipekendaraan.get())
-            # idpelanggan.append(p)
-            lamahari = int(lamasewa.get()) + int(harisewa.get())
-            z = str(lamahari)
-            tenggat = z + "-" + bulansewa.get() + "-" + tahunsewa.get()
-            tenggatpelanggan.append(tenggat)
-
-            f = kendaraanchoosen[-1]
-            a = kendaraan.index(f)
-            
-            totalbayar = harga[a] * lamahari
-            hargapelanggan.append(totalbayar)
-
-            if any(iddatadiri.get() in s for s in rincian):
-                tampilsewa.append(tipekendaraan.get())
-                tampilsewa.append(entryjenis.get())
-                tampilsewa.append(totalbayar)
-                tampilsewa.append(tenggat)
-                idpelanggan.append(tampilsewa)
-                rincian.append(idpelanggan)
-                print(tampilsewa)
-                print(idpelanggan)
-            else:
-                idpelanggan.append(iddatadiri.get())
-                tampilsewa.append(tipekendaraan.get())
-                tampilsewa.append(entryjenis.get())
-                tampilsewa.append(totalbayar)
-                tampilsewa.append(tenggat)
-                idpelanggan.append(tampilsewa)
-                rincian.append(idpelanggan)
-                print(tampilsewa)
-                print(idpelanggan)
-            
-            tampilsewa.clear()
-            print(rincian)
-            # [[id[asdas,asasd,asdasd][adas,asda,asda,]]]
-            
-            # print(totalbayar)
-            # print(tenggatpelanggan)
-            
-            # print(kendaraanchoosen)
-            # print(tampilsewa)
-
-
-        checkbutton = Button(framesewa, text='Sewa', command= lambda: [hitung()], padx= 20, pady=2.5)
-        checkbutton.grid(row=8, column=1)
-
-
-
-    else:
-        pass
-
-
-# def hitung():
-#     global jenis, kendaraan, harga, jenisdatadiri
-    
-
-#     def append():
-#         global kendaraan, harga
-#         # kendaraan.get()
-#         # iddatadiri.get()
-#         # lamasewa = lamasewa.get()
-#         # harisewa = harisewa.get()
-#         # bulansewa = bulansewa.get()
-#         # tahunsewa = tahunsewa.get()
-#         
-        
-#         framesewa.destroy()
-#         window.destroy()
-
-#         window = Toplevel()
-        
-
-#         frame0 = Frame(window)
-#         frame0.grid(row=0, column=0, sticky='news', padx=20, pady=5)
-        
-#         identitas = Label(frame0, text=idpelanggan[-1])
-#         identitas.grid(row=0, column=0)
-
-#         frame1 = Frame(window)
-#         frame1.grid(row=1, column=0, sticky='news', padx=20, pady=5)
-        
-#         
-
-        # def keranjang():
-        #     global no1, barang, quantity, harga, Total
-        #     i= 0
-        #     while i < len(listsewa):
-
-        #         no1 = Label(frame1, text= 1 + i)
-        #         no1.grid(row=i+1, column=0,)
-
-        #         barang = Label(frame1, text= kendaraan[i])
-        #         barang.grid(row=i+1, column=1, )
-
-        #         quantity = Label(frame1, text= [i])
-        #         quantity.grid(row=i+1, column=2, )
-
-        #         harga = Label(frame1, text= '{:,.2f}'.format(listharganow[i]))
-        #         harga.grid(row=i+1, column=3, )
-
-        #         Total = Label(frame1, text='{:,.2f}'.format(listtotalharga[i]))
-        #         Total.grid(row=i+1, column=4, )
-
-        #         listlabel.append(no1)
-        #         listlabel.append(barang)
-        #         listlabel.append(quantity)
-        #         listlabel.append(harga)
-        #         listlabel.append(Total)
-
-        #         i += 1
-
-        # listbox = Listbox(frame1)
-        # listbox.pack(side = LEFT, fill=BOTH)
-        # scrollbar = Scrollbar(frame1)
-        # scrollbar.pack(side = RIGHT, fill=BOTH)
-        # listbox.insert(END,kendaraanchoosen)
-        # listbox.config(yscrollcommand=scrollbar.set)
-        # scrollbar.config(command = listbox.yview)
-
-        
-
-
-    
-
-    
-
+tanggalpelanggan = []
+pembeli = []
 
 
 window = Tk()
@@ -307,10 +51,261 @@ inputpassword.pack(padx=10,pady=10, fill='x', expand=True)
 button1 = Button(login_frame, text='Login', command= lambda: [login1()], padx=20, pady=2.5)
 button1.pack()
 
+def hitung():
+    global jenis, kendaraan, harga, jenisdatadiri
+    main_window = Tk()
+    main_window.title('Penyewaan Kendaraan')
+    frame = Frame(main_window)
+    frame.pack()
+
+    framesewa = LabelFrame(frame, padx=25, pady=25)
+    framesewa.grid(row=1, column=0, padx=20, pady=5)
+    
+    #LABEL
+    lblinfo = Label(framesewa, font=( 'aria' ,12, 'bold' ),text="Sistem Penyewaan",bd=10,anchor=N)
+    lblinfo.grid(row=0,column=1)
 
 
+    labeljenis= Label(framesewa, text="Jenis Kendaraan :")
+    labeljenis.grid(row=2, column=0)
+    
+    sel= StringVar()
+
+    jenis1 = ttk.Combobox(framesewa, values= jenis, textvariable=sel)
+    jenis1.grid(row=2, column =1)
+
+    def my_updt(*args):
+        if sel.get() == "Motor":
+            tipekendaraan.config(value=kendaraan1)
+        else:
+            tipekendaraan.config(value= kendaraan)
+    sel.trace('w', my_updt)
+
+    labelkendaraan = Label(framesewa, text="Tipe Kendaraan :", anchor=W)
+    labelkendaraan.grid(row=3, column=0)
+    tipekendaraan = ttk.Combobox(framesewa,)
+    tipekendaraan.grid(row=3, column =1)
+ 
+    labeltanggal = Label(framesewa, text="Tanggal Sewa")
+    labeltanggal.grid(row=4,column=0)
+
+    cal = DateEntry(framesewa, selectmode='day')
+    cal.grid(row=4, column=1, pady=10)
+
+    labellama = Label(framesewa, text="Lama Sewa")
+    labellama.grid(row=5, column=0)
+    lamasewa = Spinbox(framesewa, from_=1, to=100)
+    lamasewa.grid(row=5, column=1, pady=10)
+
+    
+ 
+    labeljenisdata = ttk.Label(framesewa, text="Jenis Data Diri")
+    labeljenisdata.grid(row=6, column=0)
+    jenisdatadiri1 = ttk.Combobox(framesewa, values= jenisdatadiri)
+    jenisdatadiri1.grid(row=6, column=1)
+
+    labeliddata = Label(framesewa, text="Nomor Identitas")
+    labeliddata.grid(row=7, column=0)
+    iddatadiri = Entry(framesewa)
+    iddatadiri.grid(row=7, column=1, pady=10)
+
+    
+
+    def cek():
+        sub_window = Tk()
+        sub_window.title('Tenggat')
+        sub_frame = Frame(sub_window)
+        sub_frame.pack()
+        subframe = LabelFrame(sub_frame, padx=25, pady = 255)
+        subframe.grid(row=2, column=0, padx=20, pady=5)
+        
+        framedata = LabelFrame(subframe, padx=25, pady=25)
+        framedata.grid(row=1, column=0, padx=20, pady=5)
+        
+        lbldata = Label(framedata, font=( 'aria' ,12, 'bold' ),text="Sistem Penyewaan",bd=10,anchor=N)
+        lbldata.grid(row=0,column=1)
+
+        #TAMBAH WINDOW CEK TENGGAT
+
+        #TAMBAH KALO ADA ID DI PEMINJAMAN MAKA NGGA BISA NAMBAH
+        
+
+        
+    def append():
+        
+        frame1 = LabelFrame(frame, padx=25, pady=25)
+        frame1.grid(row=2, column=0, padx=20, pady=5)
+
+        label = Label(frame1, text="List Sewa Kendaraan", font=( 'aria' ,12, 'bold' ), bd=10, anchor=N)
+        label.grid(row=0, column=3)
+
+        identitas = Label(frame1, text=iddatadiri.get())
+        identitas.grid(row=1, column=0)
+
+        no = Label(frame1, text='No')
+        no.grid(row=2, column=0, )
+
+        barang = Label(frame1, text='Tipe Kendaraan')
+        barang.grid(row=2, column=1, )
+
+        quantity = Label(frame1, text='Lama Sewa')
+        quantity.grid(row=2, column=2, )
+        
+        tenggattanggal = Label(frame1, text="Tenggat Pengembalian")
+        tenggattanggal.grid(row=2, column =3)
 
 
+        hargas = Label(frame1, text='Harga')
+        hargas.grid(row=2, column=4, )
+
+        Total = Label(frame1, text='Total')
+        Total.grid(row=2, column=5, )
+
+        for i in frame1.winfo_children():
+            i.grid_configure(padx= 15, pady=2)
+        for i in framesewa.winfo_children():
+            i.grid_configure(padx= 15, pady=2)
+        jenisdatadiri1.config(state='disabled')
+        iddatadiri.config(state='disabled')
+
+        global kendaraan, harga, stok
+        p = iddatadiri.get()
+        titiu = fullkendaraan.index(tipekendaraan.get())
+        b1 = harga[titiu]
+        stok[titiu] = stok[titiu] -1
+
+        # ala = stok[titiu] - 1
+        # stok.insert(titiu, ala)
+        # print(ala)
+        print(stok)
+        papa = cal.get() 
+        papa1 = datetime.datetime.strptime(papa, "%m/%d/%y").date()
+
+        # + datetime.timedelta(days=int(lamasewa.get()))
+        lala = papa1 + datetime.timedelta(days=int(lamasewa.get())) 
+        lolo = lala.strftime("%A, %d/%m/%y")
+        
+        plis = jenis1.get() + " "+ tipekendaraan.get()
+
+        if stok[titiu] < 0:
+            # new = Tk()
+            # new.geometry("500x500")
+            top = Toplevel(frame1) #POP UP TIDAK BISA DITAMBAHKAN STOK NGGA ADA
+            top.title("Error")
+            errorlabel = Label(top, text="test")
+            errorlabel.grid(row=0, column=0 )
+            
+
+            pass
+        else:
+            pass
+
+        if any(iddatadiri.get() in s for s in pembeli):
+            jenischoosen.append(jenis1.get())
+            jenischoosen.append(plis)
+            jenischoosen.append(lolo)
+            jenischoosen.append(b1)
+            jenischoosen.append(lamasewa.get())
+            pembeli.append(jenischoosen)
+       
+            
+        else:
+            ala = jenisdatadiri1.get()
+            alab = ala + "-" + p
+            pembeli.append(alab)
+            jenischoosen.append(jenis1.get())
+            jenischoosen.append(plis)
+            jenischoosen.append(lolo)
+            jenischoosen.append(b1)
+            jenischoosen.append(lamasewa.get())
+            pembeli.append(jenischoosen)
+            
+            
+        
+        
+        # pembeli.append(kendaraanchoosen)
+
+        # print(pembeli)
+        # idpelanggan.clear()
+        # jenischoosen.clear()
+        # print(pembeli)
+        # print(pembeli)
+        # NESTED LIST MASIH ERROR
+
+
+        # print(kendaraanchoosen)
+        # print(idpelanggan)
+        
+        b = 1
+        i = 0
+        l = 3
+        s = 4
+        p1 = 2
+        while i < len(pembeli)-1:
+            # a2 = str(fullkendaraan.index(tipekendaraan.get()))
+            # print(a2)
+            # b1 = harga[1]
+            b1 = harga[fullkendaraan.index(tipekendaraan.get())]
+            # print(harga[fullkendaraan.index(tipekendaraan.get())])
+            
+            labelidentitas = Label(frame1, text="ID IDENTITAS          = ")
+            labelidentitas.grid(row = 1, column=0)
+
+            labelidentitas = Label(frame1, text=pembeli[0])
+            labelidentitas.grid(row = 1, column=1)
+            
+            labelno = Label(frame1, text=i+1)
+            labelno.grid(row=i+3, column = 0)
+
+            labelbarang = Label(frame1, text=pembeli[i+1][b])
+            labelbarang.grid(row=i+3, column = 1)
+            print(pembeli)
+            
+            # print(pembeli[i+1][b])
+        
+
+            labellamasewa = Label(frame1, text=pembeli[i+1][s])
+            labellamasewa.grid(row=i+3, column = 2)
+
+            labeltenggat = Label(frame1, text=pembeli[i+1][p1])
+            labeltenggat.grid(row=i+3, column=3)
+
+    
+
+            labelharga = Label(frame1, text=pembeli[i+1][l])
+            labelharga.grid(row=i+3, column = 4)
+
+            tes = int(pembeli[i+1][s])*int(pembeli[i+1][l])
+
+            labeltotal = Label(frame1, text=tes)
+            labeltotal.grid(row=i+3, column = 5)
+            i+=1
+            b+=5
+            l+=5
+            s+=5
+            p1+=5
+
+
+    checkbutton = Button(framesewa, text='Sewa', command= lambda:[append()], padx= 20, pady=2.5)
+    checkbutton.grid(row=8, column=1)
+    databutton = Button(framesewa, text='Cek Tenggat', command= lambda:[cek()], padx=20, pady=2.5)
+    databutton.grid(row=9, column=1)
+
+    
+def login1():
+
+    username = inputusername.get()
+    password = inputpassword.get()
+
+    if username in userpass and password == userpass[username]:
+        login_frame.destroy()
+        window.destroy()
+        hitung()
+    else:
+        pass
+
+
+# ERROR POPUP UDAH ADA, TAPI STOK <1 MASIH MASUK
 
 
 login_frame.mainloop()
