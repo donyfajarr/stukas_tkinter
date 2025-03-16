@@ -1,0 +1,1 @@
+This case study was used as a master key for the Algorithm and Programming Practicum in the 2022/2023 academic year. It was developed and managed under my role as an assistant for the practicum group.
